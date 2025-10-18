@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        php: [7.3, 7.4, '8.0', 8.1, '8.2']
+        php: [7.3, 7.4, '8.0', 8.1, '8.2', '8.3']
         laravel: [7, 8, 9, 10, '11']
         exclude:
           - php: 7.3
@@ -53,3 +53,33 @@ jobs:
         uses: php-actions/composer@v5
         with:
           command: test
+
+  run-laravel-12:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php: ['8.2', '8.3']
+
+    name: PHP ${{ matrix.php }} Test on ${{ matrix.os }} – Laravel 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Pin Illuminate to Laravel 12
+        run: |
+          composer remove illuminate/routing illuminate/support --no-update || true
+          composer require illuminate/routing:^12.0 illuminate/support:^12.0 --no-interaction --no-update -W
+
+      - name: Update dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run tests
+        run: vendor/bin/phpunit --colors=always

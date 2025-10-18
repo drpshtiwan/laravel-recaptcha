@@ -95,7 +95,7 @@ class ReCaptchaServiceProvider extends ServiceProvider
 
         Route::get(
             config('recaptcha.default_validation_route', 'biscolab-recaptcha/validate'),
-            ['uses' => 'Biscolab\ReCaptcha\Controllers\ReCaptchaController@validateV3']
+            [\Biscolab\ReCaptcha\Controllers\ReCaptchaController::class, 'validateV3']
         )->middleware('web');
 
         return $this;

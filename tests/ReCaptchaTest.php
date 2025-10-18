@@ -104,19 +104,6 @@ class ReCaptchaTest extends TestCase
 	public function testSkipByIpAndReturnArrayReturnsDefaultArray()
 	{
 
-		$mock = $this->getMockBuilder(ReCaptchaBuilder::class)
-			->setConstructorArgs([
-				"api_site_key",
-				"api_secret_key"
-			])
-			->setMethods([
-				'returnArray'
-			])
-			->getMock();
-
-		$mock->method('returnArray')
-			->willReturn(true);
-
 		$this->setSkipByIp($this->recaptcha_v3, true);
 
 		$validate = $this->recaptcha_v3->validate("");
